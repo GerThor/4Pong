@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+<style>
+  div.a {
+    line-height: 1.5 ;
+  }
+</style>
+
+<div style="text-align:center;">
+  <h1>{{ header }}</h1>
+
+  <div class = "a">
+    <p>Welcome to 4Pong, a four player multiplayer pong game where each player takes control of one paddle and tries to bounce a ball past an opponents screen.<br/>
+      Head over to the Game/Lobby tab to begin playing against other players or head to the Leaderboards page to see how you stack up against other players. 
+    </p>
+  </div>
+  
+  <h2>How to Play</h2>
+  <div class = "a">
+    <ol style="list-style-position:inside;">
+    <li>Use the A and D keys to move your paddle left and right if you are a top or bottom player.</li>
+    <li>Use the W and S keys to move your paddle up and down if you are a left or right player.</li>
+    <li>Now block the pong balls from going past your side of the screen and send the ball past a opponents' screen to score points.</li>
+    <li>First player to 20 points wins, or highest scorer after the timer ends!</li>
+  </ol>
+  </div>
+
+</div>
+
+
+{% endblock %}

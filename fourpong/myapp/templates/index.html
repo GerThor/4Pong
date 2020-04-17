@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+<h1>Template Demo</h1>
+{{ body }}
+{% if wins %}
+<ul>
+{% for i in wins %}
+<li> {{ i.author }} {{ i.gamesWon }}</li>
+
+{% endfor %}
+{% endif %}
+</ul>
+
+<form action="/" method="post">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" class="button" value="Add this Number" />
+</form>
+{% endblock %}

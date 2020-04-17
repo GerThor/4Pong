@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> {% block title %}{% endblock %} </title>
+</head>
+<body>
+  <!--Navigation bar adapted from see README.md(Works Cited 1.)-->
+  <div class="topnav">
+    <a class="active" href="/homePage">Home</a>
+    <a href="/leaderBoard">LeaderBoards</a>
+    <a href="/gameLobby">Game/Lobby</a>
+    <a href="/logout">Logout</a>
+  </div>
+{% block content %}
+{% endblock %}
+</body>
+</html>

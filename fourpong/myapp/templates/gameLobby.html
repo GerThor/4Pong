@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+
+<div style="text-align:center;">
+  <h1>{{ header }}</h1>
+</div>
+
+<div style="text-align:center;">
+  <canvas
+  id = "PongGame"
+  width = "850" 
+  height = "850"
+  style = "border: 1px solid black;">
+  </canvas>
+</div>
+
+<script>
+  var c = document.getElementById("PongGame");
+  var ctx = c.getContext("2d");
+  var randX = Math.random() < 0.5 ? 75 : -75;
+  var randY = Math.random() < 0.5 ? 75 : -75;
+  //BotPaddle Red
+  var botPaddleX = c.width/2;
+  var botPaddleY = c.height - 30;
+  var botPaddleWidth = 100;
+  var botPaddleHeight = 20;
+  var botLeftPressed = false;
+  var botRightPressed = false;
+  //TopPaddle Blue
+  var topPaddleX = c.width/2;
+  var topPaddleY = 10;
+  var topPaddleWidth = 100;
+  var topPaddleHeight = 20;
+  //RightPaddle Green
+  var rightPaddleX = c.width - 30;
+  var rightPaddleY = c.height/2;
+  var rightPaddleWidth = 20;
+  var rightPaddleHeight = 100;
+  //LeftPaddle Orange
+  var leftPaddleX = 10;
+  var leftPaddleY = c.height/2;
+  var leftPaddleWidth = 20;
+  var leftPaddleHeight = 100;
+  // Other
+  var posValue = 2; //4 for test
+  var negValue = -2; //-4 for test
+  var ball;
+  var ballX = c.width/2 + randX;
+  var ballY = c.height/2 + randY;
+  var balldx = Math.random() < 0 ? posValue : negValue; 
+  var balldy = Math.random() < 0 ? posValue : negValue;
+  var ballRadius = 8;
+  var color = "black";
+
+  document.addEventListener("keydown", keyDown);
+  document.addEventListener("keyup", keyUp);
+
+  //Draw ball
+  function drawBall(color) {
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.closePath();
+    
+  }
+
+  function drawP1Red() {
+    ctx.fillStyle = "red";
+    ctx.fillRect(botPaddleX, botPaddleY, botPaddleWidth, botPaddleHeight);
+  }
+
+  function drawP2Green() {
+    ctx.fillStyle = "green";
+    ctx.fillRect(rightPaddleX, rightPaddleY, rightPaddleWidth, rightPaddleHeight);
+  }
+
+  function drawP3Blue() {
+    ctx.fillStyle = "blue";
+    ctx.fillRect(topPaddleX, topPaddleY, topPaddleWidth, topPaddleHeight);
+  }
+
+  function drawP4Orange() {
+    ctx.fillStyle = "orange";
+    ctx.fillRect(leftPaddleX, leftPaddleY, leftPaddleWidth, leftPaddleHeight);
+  }
+
+  function moveP1Red () {
+    if (botRightPressed && ((botPaddleX+100) < c.width)) {
+      botPaddleX += 2;
+    } else if (botLeftPressed && (botPaddleX > 0)) {
+      botPaddleX -= 2;
+    }
+  }
+
+
+  //ball = new Ball();
+
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    drawP1Red();
+    drawP2Green();
+    drawP3Blue();
+    drawP4Orange();
+    drawBall(color);
+    ballX += balldx;
+    ballY += balldy;
+    
+    moveP1Red();
+    if (ballX + balldx < ballRadius) {
+      balldx = -balldx;
+      ballX -= 2;
+      ballY -= 2;
+      color = "orange";
+    }
+
+    if(ballX + balldx > c.width-ballRadius) {
+      balldx = -balldx;
+      ballX -= 2;
+      ballY -= 2;
+      color = "green";
+    }
+
+    //Bottom Paddle / Screen
+    if(ballY + balldy < ballRadius /*|| ballY + balldy < ballRadius*/){
+      balldy = -balldy;
+      ballY -= 2;
+      ballX -= 2;
+      color = "blue";
+    } else if(ballY + balldy > c.height-ballRadius-botPaddleHeight-30) { // == c.height-30
+        if((ballX > botPaddleX && ballX < botPaddleX + botPaddleWidth) && ballY + balldy == c.height-ballRadius-botPaddleHeight) {
+            balldy = -balldy;
+            ballY -= 2;
+            color = "red";
+        } else if (ballY + balldy > c.height+(ballRadius*10)) {
+            //alert("GAME OVER");
+            ballX = c.width/2 + randX;
+            ballY = c.width/2 + randY;
+            balldx = Math.random() < 0.5 ? posValue : negValue;
+            balldy = Math.random() < 0.5 ? posValue : negValue;
+            color = "black";
+            // document.location.reload();
+            // clearInterval(interval);
+       }
+    } 
+
+  }
+
+  function keyDown(e) {
+    if (e.keyCode == 68) {
+      botRightPressed = true;
+    } else if (e.keyCode == 65) {
+      botLeftPressed = true;
+    }
+  }
+
+  function keyUp(e) {
+    if (e.keyCode == 68) {
+      botRightPressed = false;
+    } else if (e.keyCode == 65) {
+      botLeftPressed = false;
+    }
+  }
+  var interval = setInterval(draw, 10);
+
+</script>
+{% endblock %}

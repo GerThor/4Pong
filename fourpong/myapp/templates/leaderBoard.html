@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+<style>
+  div.a {
+    line-height: 1.5 ;
+  }
+</style>
+
+<div style="text-align:center;">
+  <h1>{{ header }}</h1>
+</div>
+
+<div class = "a">
+
+  <div id="wins">
+    <ol>
+      <li v-for="i in wins">
+        {% verbatim %}
+          {{ i.author }}, {{ i.gamesWon }} Wins
+        {% endverbatim %}
+      </li>
+    </ol>
+  </div>
+  
+  <!-- {% if wins %}
+  <ol>
+  {% for i in wins %}
+  <li> {{ i.author }}, {{ i.gamesWon }} Wins</li>
+
+  {% endfor %}
+  {% endif %}
+  </ol> -->
+</div>
+
+<!-- Production version, Uncomment and use instead of Developer when hosting for real -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static "app.js" %}"></script>
+
+{% endblock %}
+
+<!-- Developer Version, swap to production later
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+
+
+
+
