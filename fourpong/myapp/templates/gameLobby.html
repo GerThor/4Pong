@@ -9,8 +9,8 @@
 <div style="text-align:center;">
   <canvas
   id = "PongGame"
-  width = "850" 
-  height = "850"
+  width = "700" 
+  height = "700"
   style = "border: 1px solid black;">
   </canvas>
 </div>
@@ -18,8 +18,8 @@
 <script>
   var c = document.getElementById("PongGame");
   var ctx = c.getContext("2d");
-  var randX = Math.random() < 0.5 ? 75 : -75;
-  var randY = Math.random() < 0.5 ? 75 : -75;
+  var randX = Math.random() <= 0 ? 54 : -54;
+  var randY = Math.random() <= 0 ? 24 : -24;
   //BotPaddle Red
   var botPaddleX = c.width/2;
   var botPaddleY = c.height - 30;
@@ -48,8 +48,8 @@
   var ball;
   var ballX = c.width/2 + randX;
   var ballY = c.height/2 + randY;
-  var balldx = Math.random() < 0 ? posValue : negValue; 
-  var balldy = Math.random() < 0 ? posValue : negValue;
+  var balldx = Math.random() < 0.5 ? posValue : negValue; 
+  var balldy = Math.random() < 0.5 ? posValue : negValue;
   var ballRadius = 8;
   var color = "black";
 
@@ -111,28 +111,28 @@
     moveP1Red();
     if (ballX + balldx < ballRadius) {
       balldx = -balldx;
-      ballX -= 2;
-      ballY -= 2;
+      ballX -= 4;
+      ballY -= 4;
       color = "orange";
     }
 
     if(ballX + balldx > c.width-ballRadius) {
       balldx = -balldx;
-      ballX -= 2;
-      ballY -= 2;
+      ballX -= 4;
+      ballY -= 4;
       color = "green";
     }
 
     //Bottom Paddle / Screen
     if(ballY + balldy < ballRadius /*|| ballY + balldy < ballRadius*/){
       balldy = -balldy;
-      ballY -= 2;
-      ballX -= 2;
+      ballY -= 4;
+      ballX -= 4;
       color = "blue";
-    } else if(ballY + balldy > c.height-ballRadius-botPaddleHeight-30) { // == c.height-30
+    } else if(ballY + balldy > c.height-ballRadius-botPaddleHeight-20) { // == c.height-30
         if((ballX > botPaddleX && ballX < botPaddleX + botPaddleWidth) && ballY + balldy == c.height-ballRadius-botPaddleHeight) {
             balldy = -balldy;
-            ballY -= 2;
+            ballY -= 4;
             color = "red";
         } else if (ballY + balldy > c.height+(ballRadius*10)) {
             //alert("GAME OVER");
