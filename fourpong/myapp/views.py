@@ -61,13 +61,17 @@ def leaderBoard(request):
   }
   return render(request, "leaderBoard.html", context=context)
 
-#@login_required uncomment when done developing
+@login_required
 def gameLobby(request):
   context = {
     "title": "GameLobby",
     "header": "Game Lobby"
     
   }
+  if request.method == "POST":
+    query = models.gameModel.objects.get(author=request.user)
+    query.gamesWon += 1
+    query.save()
   return render(request, "gameLobby.html", context=context)
 
 
@@ -102,3 +106,14 @@ def getWins(request):
     gamesWonList["wins"] += [tempWins]
 
   return JsonResponse(gamesWonList)
+
+#Chat stuff
+@login_required
+def chatPage(request):
+  return render(request, 'chat/chatPage.html', {})
+
+@login_required
+def room(request, room_name):
+  return render(request, 'chat/room.html', {
+    'room_name': room_name,
+  })

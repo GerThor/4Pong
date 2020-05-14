@@ -8,7 +8,7 @@ var app = new Vue({
   },
   created: function() {
     this.getWinsList();
-    this.timer = setInterval(this.getWinsList, 10000);
+    this.timer = setInterval(this.getWinsList, 10000); //originally 10000
   },
   methods: {
     getWinsList: function() {

@@ -31,5 +31,7 @@ urlpatterns = [
     path('homePage/', views.homePage),
     path('leaderBoard/', views.leaderBoard),
     path('gameLobby/', views.gameLobby),
-    path('getWins/', views.getWins)
+    path('getWins/', views.getWins),
+    path('chat/', views.chatPage, name='index'),
+    path('chat/<str:room_name>/', views.room, name='room')
 ]

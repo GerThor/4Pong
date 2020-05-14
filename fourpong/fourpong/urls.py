@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import include #if issues delete this later
 
 import myapp 
 # Project Level Urls

@@ -15,6 +15,10 @@
   </canvas>
 </div>
 
+<form id="aForm" action="/gameLobby/" method="post">
+  {% csrf_token %}
+</form>
+
 <script>
   var c = document.getElementById("PongGame");
   var ctx = c.getContext("2d");
@@ -32,29 +36,46 @@
   var topPaddleY = 10;
   var topPaddleWidth = 100;
   var topPaddleHeight = 20;
+  var topLeftPressed = false;
+  var topRightPressed = false;
   //RightPaddle Green
   var rightPaddleX = c.width - 30;
   var rightPaddleY = c.height/2;
   var rightPaddleWidth = 20;
   var rightPaddleHeight = 100;
+  var rightLeftPressed = false;
+  var rightRightPressed = false;
   //LeftPaddle Orange
   var leftPaddleX = 10;
   var leftPaddleY = c.height/2;
   var leftPaddleWidth = 20;
   var leftPaddleHeight = 100;
+  var leftLeftPressed = false;
+  var leftRightPressed = false;
   // Other
-  var posValue = 2; //4 for test
-  var negValue = -2; //-4 for test
+  var posValue = 2; //4 for test, 2 for real
+  var negValue = -2; //-4 for test, -2 for real
   var ball;
-  var ballX = c.width/2 + randX;
-  var ballY = c.height/2 + randY;
-  var balldx = Math.random() < 0.5 ? posValue : negValue; 
-  var balldy = Math.random() < 0.5 ? posValue : negValue;
+  var ballX = c.width/2 + randX; // real
+  var ballY = c.height/2 + randY; // real
+  var balldx = Math.random() < 0.5 ? posValue : negValue; // real 
+  var balldy = Math.random() < 0.5 ? posValue : negValue; // real
+  // var ballX = c.width/2; //test
+  // var ballY = c.height/4; //test
+  // var balldx = posValue; // test modify to fit need
+  // var balldy = posValue; // test modify to fit need
   var ballRadius = 8;
   var color = "black";
 
-  document.addEventListener("keydown", keyDown);
-  document.addEventListener("keyup", keyUp);
+  var keys = [];
+
+  // See README.md Works Cited (4.)
+  document.body.addEventListener("keydown", function (e) {
+    keys[e.keyCode] = true;
+  });
+  document.body.addEventListener("keyup", function (e) {
+      keys[e.keyCode] = false;
+  });
 
   //Draw ball
   function drawBall(color) {
@@ -86,16 +107,37 @@
     ctx.fillRect(leftPaddleX, leftPaddleY, leftPaddleWidth, leftPaddleHeight);
   }
 
-  function moveP1Red () {
-    if (botRightPressed && ((botPaddleX+100) < c.width)) {
-      botPaddleX += 2;
-    } else if (botLeftPressed && (botPaddleX > 0)) {
-      botPaddleX -= 2;
+  // 87 w, 83 s, 74 j, 76 L, 73 i, 75 k, 68 a, 65 d
+  function movePaddles () {
+    // red/bottom paddle
+    if (keys[68] && ((botPaddleX+100) < c.width)) {
+      botPaddleX += 4;
+    } else if (keys[65] && (botPaddleX > 0)) {
+      botPaddleX -= 4;
+    }
+    // orange/left paddle
+    if (keys[87] && (leftPaddleY > 0)) {
+      leftPaddleY -= 4;
+    } else if (keys[83] && ((leftPaddleY+100) < c.height)) {
+      leftPaddleY += 4;
+    }
+    // blue/top paddle
+    if (keys[76] && ((topPaddleX+100) < c.width)) {
+      topPaddleX += 4;
+    } else if (keys[74] && (topPaddleX > 0)) {
+      topPaddleX -= 4;
+    }
+    // green/right paddle
+    if (keys[73] && (rightPaddleY > 0)) {
+      rightPaddleY -= 4;
+    } else if (keys[75] && ((rightPaddleY+100) < c.height)) {
+      rightPaddleY += 4;
     }
   }
 
-
-  //ball = new Ball();
+  function incrementWin() {
+    document.getElementById("aForm").submit();
+  }
 
   function draw() {
     ctx.clearRect(0, 0, c.width, c.height);
@@ -108,38 +150,92 @@
     ballX += balldx;
     ballY += balldy;
     
-    moveP1Red();
-    if (ballX + balldx < ballRadius) {
-      balldx = -balldx;
-      ballX -= 4;
-      ballY -= 4;
-      color = "orange";
+    movePaddles();
+    
+    // Left Paddle/Screen/Orange
+    if (ballX + balldx < ballRadius+leftPaddleWidth+20) {
+      if ((ballY > leftPaddleY && ballY < leftPaddleY + leftPaddleHeight) && (ballX + balldx < (ballRadius+leftPaddleWidth+8))) {
+        balldx = -balldx;
+        ballX -= 4;
+        ballY -= 4;
+        color = "orange";
+      } else if (ballX + balldx < -(ballRadius*10)) {
+        incrementWin();
+        alert("GAME OVER");
+        ballX = c.width/2 + randX; // real values
+        ballY = c.width/2 + randY; // real values
+        balldx = Math.random() < 0.5 ? posValue : negValue; // real values
+        balldy = Math.random() < 0.5 ? posValue : negValue; // real values
+        // ballX = c.width/2; //test
+        // ballY = c.height/4; //test
+        // balldx = posValue; // test modify to fit need
+        // balldy = posValue; // test modify to fit need
+        color = "black";
+      }
     }
 
-    if(ballX + balldx > c.width-ballRadius) {
-      balldx = -balldx;
-      ballX -= 4;
-      ballY -= 4;
-      color = "green";
+    // Right Paddle/Screen/Green
+    if(ballX + balldx > c.width-ballRadius-rightPaddleWidth-20) {
+      if ((ballY > rightPaddleY && ballY < rightPaddleY + rightPaddleHeight) && (ballX + balldx > (c.width-rightPaddleWidth-14)) && ballX < c.width-rightPaddleWidth) {
+        balldx = -balldx;
+        ballX -= 4;
+        ballY -= 4;
+        color = "green";
+      } else if (ballX + balldx > (c.width + ballRadius*10)) {
+        incrementWin();
+        alert("GAME OVER");
+        ballX = c.width/2 + randX; // real values
+        ballY = c.width/2 + randY; // real values
+        balldx = Math.random() < 0.5 ? posValue : negValue; // real values
+        balldy = Math.random() < 0.5 ? posValue : negValue; // real values
+        // ballX = c.width/2; //test
+        // ballY = c.height/4; //test
+        // balldx = posValue; // test modify to fit need
+        // balldy = posValue; // test modify to fit need
+        color = "black";
+      }
     }
 
-    //Bottom Paddle / Screen
-    if(ballY + balldy < ballRadius /*|| ballY + balldy < ballRadius*/){
-      balldy = -balldy;
-      ballY -= 4;
-      ballX -= 4;
-      color = "blue";
-    } else if(ballY + balldy > c.height-ballRadius-botPaddleHeight-20) { // == c.height-30
+    // Top Paddle/Screen/Blue
+    if(ballY + balldy < ballRadius+botPaddleHeight+10){
+      if ((ballX > topPaddleX && ballX < topPaddleX + topPaddleWidth)) {
+        balldy = -balldy;
+        ballX -= 4;
+        ballY -= 4;
+        color = "blue";
+      } else if (ballY + balldy < -(ballRadius*10)) {
+        incrementWin();
+        alert("GAME OVER");
+        ballX = c.width/2 + randX; // real values
+        ballY = c.width/2 + randY; // real values
+        balldx = Math.random() < 0.5 ? posValue : negValue; // real values
+        balldy = Math.random() < 0.5 ? posValue : negValue; // real values
+        // ballX = c.width/2; //test
+        // ballY = c.height/4; //test
+        // balldx = posValue; // test modify to fit need
+        // balldy = posValue; // test modify to fit need
+        color = "black";
+      }
+    }
+
+    // Bottom Paddle/Screen/Red
+    if(ballY + balldy > c.height-ballRadius-botPaddleHeight-20) { // == c.height-30
         if((ballX > botPaddleX && ballX < botPaddleX + botPaddleWidth) && ballY + balldy == c.height-ballRadius-botPaddleHeight) {
             balldy = -balldy;
+            ballX -= 4;
             ballY -= 4;
             color = "red";
         } else if (ballY + balldy > c.height+(ballRadius*10)) {
-            //alert("GAME OVER");
-            ballX = c.width/2 + randX;
-            ballY = c.width/2 + randY;
-            balldx = Math.random() < 0.5 ? posValue : negValue;
-            balldy = Math.random() < 0.5 ? posValue : negValue;
+            incrementWin();
+            alert("GAME OVER");
+            ballX = c.width/2 + randX; // real values
+            ballY = c.width/2 + randY; // real values
+            balldx = Math.random() < 0.5 ? posValue : negValue; // real values
+            balldy = Math.random() < 0.5 ? posValue : negValue; // real values
+            // ballX = c.width/2; //test
+            // ballY = c.height/4; //test
+            // balldx = posValue; // test modify to fit need
+            // balldy = posValue; // test modify to fit need
             color = "black";
             // document.location.reload();
             // clearInterval(interval);
@@ -148,22 +244,7 @@
 
   }
 
-  function keyDown(e) {
-    if (e.keyCode == 68) {
-      botRightPressed = true;
-    } else if (e.keyCode == 65) {
-      botLeftPressed = true;
-    }
-  }
-
-  function keyUp(e) {
-    if (e.keyCode == 68) {
-      botRightPressed = false;
-    } else if (e.keyCode == 65) {
-      botLeftPressed = false;
-    }
-  }
-  var interval = setInterval(draw, 10);
+  var interval = setInterval(draw, 20);
 
 </script>
 {% endblock %}
