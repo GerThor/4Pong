@@ -60,8 +60,8 @@
   var ballY = c.height/2 + randY; // real
   var balldx = Math.random() < 0.5 ? posValue : negValue; // real 
   var balldy = Math.random() < 0.5 ? posValue : negValue; // real
-  // var ballX = c.width/2; //test
-  // var ballY = c.height/4; //test
+  // var ballX = c.width/2; //test values
+  // var ballY = c.height/4; //test values
   // var balldx = posValue; // test modify to fit need
   // var balldy = posValue; // test modify to fit need
   var ballRadius = 8;
@@ -107,7 +107,7 @@
     ctx.fillRect(leftPaddleX, leftPaddleY, leftPaddleWidth, leftPaddleHeight);
   }
 
-  // 87 w, 83 s, 74 j, 76 L, 73 i, 75 k, 68 a, 65 d
+  // 87 w, 83 s, 74 j, 76 L, 73 i, 75 k, 68 a, 65 d (keycodes)
   function movePaddles () {
     // red/bottom paddle
     if (keys[68] && ((botPaddleX+100) < c.width)) {
@@ -166,8 +166,8 @@
         ballY = c.width/2 + randY; // real values
         balldx = Math.random() < 0.5 ? posValue : negValue; // real values
         balldy = Math.random() < 0.5 ? posValue : negValue; // real values
-        // ballX = c.width/2; //test
-        // ballY = c.height/4; //test
+        // ballX = c.width/2; //test values
+        // ballY = c.height/4; //test values
         // balldx = posValue; // test modify to fit need
         // balldy = posValue; // test modify to fit need
         color = "black";
@@ -188,8 +188,8 @@
         ballY = c.width/2 + randY; // real values
         balldx = Math.random() < 0.5 ? posValue : negValue; // real values
         balldy = Math.random() < 0.5 ? posValue : negValue; // real values
-        // ballX = c.width/2; //test
-        // ballY = c.height/4; //test
+        // ballX = c.width/2; //test values
+        // ballY = c.height/4; //test values
         // balldx = posValue; // test modify to fit need
         // balldy = posValue; // test modify to fit need
         color = "black";
@@ -210,8 +210,8 @@
         ballY = c.width/2 + randY; // real values
         balldx = Math.random() < 0.5 ? posValue : negValue; // real values
         balldy = Math.random() < 0.5 ? posValue : negValue; // real values
-        // ballX = c.width/2; //test
-        // ballY = c.height/4; //test
+        // ballX = c.width/2; //test values
+        // ballY = c.height/4; //test values
         // balldx = posValue; // test modify to fit need
         // balldy = posValue; // test modify to fit need
         color = "black";
@@ -232,9 +232,9 @@
             ballY = c.width/2 + randY; // real values
             balldx = Math.random() < 0.5 ? posValue : negValue; // real values
             balldy = Math.random() < 0.5 ? posValue : negValue; // real values
-            // ballX = c.width/2; //test
-            // ballY = c.height/4; //test
-            // balldx = posValue; // test modify to fit need
+            // ballX = c.width/2; // test values
+            // ballY = c.height/4; // test values
+            // balldx = posValue; // test modify to fit need 
             // balldy = posValue; // test modify to fit need
             color = "black";
             // document.location.reload();

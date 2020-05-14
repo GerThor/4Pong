@@ -16,12 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-# from django.contrib.auth.models import User
+
 
 
 from . import views
 
-# username = user.username
 # App Level URLs
 urlpatterns = [
     path('', views.homePage),

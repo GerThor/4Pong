@@ -11,29 +11,6 @@ import json
 
 # Create your views here.
 
-#@login_required # delete this entire thing later
-# def index(request):
-#   if request.method == "POST":
-#     form = forms.gameForm(request.POST)
-#     if form.is_valid():
-#       form.save(request)
-#       form = forms.gameForm()
-#   else:
-#     form = forms.gameForm()
-
-#   gamesWon = models.gameModel.objects.order_by('-gamesWon')#[:5]
-
-
-  
-
-#   context = {
-#     "title": "Template Demo",
-#     "body": "Hello Template",
-#     "wins": gamesWon,
-#     "form": form
-#   }
-#   return render(request, "index.html", context=context)
-
 @login_required
 def homePage(request):
   context = {
@@ -50,7 +27,7 @@ def homePage(request):
 @login_required
 def leaderBoard(request):
 
-  gamesWon = models.gameModel.objects.order_by('-gamesWon')#[:20] #uncomment this for final submission and delete this comment
+  gamesWon = models.gameModel.objects.order_by('-gamesWon')[:20]
   
   context = {
     "title": "LeaderBoard",
@@ -96,7 +73,7 @@ def logout_view(request):
   return redirect("/login/")
 
 def getWins(request):
-  gamesWonObjects = models.gameModel.objects.order_by('-gamesWon')#[:20] #uncomment this for final submission and delete this comment
+  gamesWonObjects = models.gameModel.objects.order_by('-gamesWon')[:20]
   gamesWonList = {}
   gamesWonList["wins"] = []
   for i in gamesWonObjects:
